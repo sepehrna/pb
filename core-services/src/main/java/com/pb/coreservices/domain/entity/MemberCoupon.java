@@ -7,10 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApplicationUserDetail extends Entity {
+public class MemberCoupon extends Entity {
 
-    private String username;
-    private String password;
-    private String role;
+    private Long id;
+    private Coupon coupon;
 
 }

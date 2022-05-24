@@ -9,8 +9,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApplicationUsersDto extends DataTransferObject {
+public class CouponDto extends DataTransferObject {
 
-    private Set<ApplicationUserDetailDto> applicationUserDetails;
+    private Long id;
+    private String name;
+
+    private Set<CouponLicenseDto> couponLicenseSet;
 
 }

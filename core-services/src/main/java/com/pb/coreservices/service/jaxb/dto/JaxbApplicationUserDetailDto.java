@@ -1,15 +1,19 @@
 package com.pb.coreservices.service.jaxb.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@NoArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 @XmlRootElement
 @XmlType(propOrder = {"username", "password", "role" })
 public class JaxbApplicationUserDetailDto {

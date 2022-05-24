@@ -6,11 +6,14 @@ import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApplicationUsers extends Entity{
+public class Coupon extends Entity {
 
-    private Set<ApplicationUserDetail> applicationUserDetails;
+    private Long id;
+    private String name;
+
+    private Set<CouponLicense> couponLicenseSet;
 
 }

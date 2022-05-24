@@ -1,16 +1,18 @@
 package com.pb.coreservices.domain.entity;
 
 import lombok.*;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApplicationUserDetail extends Entity {
+public class CouponLicense extends Entity{
 
-    private String username;
-    private String password;
-    private String role;
+    private Long id;
+    private Timestamp validFrom;
+    private Timestamp validUtil;
 
 }
+

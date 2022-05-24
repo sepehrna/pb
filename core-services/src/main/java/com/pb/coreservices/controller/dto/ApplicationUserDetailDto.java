@@ -1,15 +1,13 @@
 package com.pb.coreservices.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationUserDetailDto {
+@EqualsAndHashCode(callSuper = true)
+public class ApplicationUserDetailDto extends DataTransferObject {
 
     private String username;
     private String password;

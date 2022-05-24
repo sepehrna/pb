@@ -1,17 +1,18 @@
 package com.pb.coreservices.controller.mapper;
 
-import com.pb.coreservices.controller.dto.ApplicationUsersDto;
-import com.pb.coreservices.domain.entity.ApplicationUsers;
+import com.pb.coreservices.controller.dto.MemberCouponDto;
+import com.pb.coreservices.domain.entity.MemberCoupon;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Service;
 
 @Service
 @Mapper(componentModel = "spring"
-        , uses = {ApplicationUserDetailControllerMapper.class}
         , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ApplicationUsersControllerMapper {
+public interface MemberCouponControllerMapper {
 
-    ApplicationUsersDto map(ApplicationUsers applicationUsers);
+    @InheritInverseConfiguration
+    MemberCoupon map(MemberCouponDto memberCouponDto);
 
 }
