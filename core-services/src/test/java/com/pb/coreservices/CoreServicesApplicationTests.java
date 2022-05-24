@@ -16,16 +16,6 @@ class CoreServicesApplicationTests {
     void contextLoads() {
     }
 
-    /*@Test
-    void insertTestMember() {
-        memberRepository.save(MemberDao.builder()
-                        .id(1L)
-                        .name("sepehr")
-                        .build())
-                .doOnError(Throwable::printStackTrace)
-                .subscribe();
-    }*/
-
 //    @Test
 //    void findMemberBlocking() {
 //        memberBlockingRepository.findAll();

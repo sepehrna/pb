@@ -1,5 +1,6 @@
 package com.pb.coreservices.repository.dao;
 
+import com.pb.coreservices.util.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -26,17 +27,13 @@ abstract class DataAccessObject {
 
     @PrePersist
     public void onPrePersist() {
-        setInsertTime(getCurrentTime());
+        setInsertTime(DateTimeUtil.getCurrentTime());
     }
 
     @PreUpdate
     public void onPreUpdate() {
         entityVersion++;
-        setLastUpdateTime(getCurrentTime());
-    }
-
-    private Timestamp getCurrentTime() {
-        return Timestamp.valueOf(java.time.LocalDateTime.now());
+        setLastUpdateTime(DateTimeUtil.getCurrentTime());
     }
 
 }

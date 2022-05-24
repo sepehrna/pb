@@ -1,17 +1,16 @@
 package com.pb.coreservices.controller.handler;
 
-import com.pb.coreservices.controller.dto.DataTransferObject;
 import com.pb.coreservices.domain.exception.MandatoryFieldEmptyException;
 import com.pb.coreservices.domain.exception.NotFoundException;
 import org.springframework.http.ResponseEntity;
 
-public class ApiResultHandlerImpl<T extends DataTransferObject> implements ApiResultHandler<T> {
+public class ApiResultHandlerImpl<T> implements ApiResultHandler<T> {
 
 
     @Override
-    public ResponseEntity<T> handle(T dataTransferObject) {
+    public ResponseEntity<T> handle(T t) {
         return ResponseEntity
-                .ok(dataTransferObject);
+                .ok(t);
     }
 
     @Override
@@ -30,11 +29,11 @@ public class ApiResultHandlerImpl<T extends DataTransferObject> implements ApiRe
     }
 
     @Override
-    public ResponseEntity<T> handle(T dataTransferObject, Exception exception) {
+    public ResponseEntity<T> handle(T t, Exception exception) {
         if (exception instanceof MandatoryFieldEmptyException)
             return ResponseEntity
                     .badRequest()
-                    .body(dataTransferObject);
+                    .body(t);
         if (exception instanceof NotFoundException)
             return ResponseEntity
                     .notFound()

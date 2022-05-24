@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Mapper(componentModel = "spring"
@@ -31,4 +32,6 @@ public abstract class MemberCouponRepositoryMapper {
     }
 
     abstract MemberCouponDao map(MemberCoupon memberCoupon);
+
+    abstract Set<MemberCoupon> map(Set<MemberCouponDao> memberCouponDao);
 }

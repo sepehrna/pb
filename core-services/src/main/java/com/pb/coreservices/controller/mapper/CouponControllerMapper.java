@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @Mapper(componentModel = "spring"
         , uses = {CouponLicenseControllerMapper.class}
@@ -15,5 +17,7 @@ public interface CouponControllerMapper {
     Coupon map(CouponDto couponDto);
 
     CouponDto map(Coupon coupon);
+
+    Set<CouponDto> map(Set<Coupon> couponSet);
 
 }

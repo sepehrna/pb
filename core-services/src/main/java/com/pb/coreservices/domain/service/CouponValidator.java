@@ -3,14 +3,19 @@ package com.pb.coreservices.domain.service;
 import com.pb.coreservices.domain.entity.Coupon;
 import com.pb.coreservices.domain.exception.DomainException;
 import com.pb.coreservices.domain.exception.MandatoryFieldEmptyException;
+import com.pb.coreservices.util.DateTimeUtil;
 
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.pb.coreservices.domain.service.ValidatorResult.invalid;
 import static com.pb.coreservices.domain.service.ValidatorResult.valid;
 
+
+/**
+ * This is a validator class which designed with the combinator design pattern for validating the business's rules
+ * that related to the member entity
+ */
 public interface CouponValidator extends Function<Coupon, ValidatorResult> {
 
     static CouponValidator isNameNullOrEmpty() {
@@ -18,13 +23,14 @@ public interface CouponValidator extends Function<Coupon, ValidatorResult> {
                 new MandatoryFieldEmptyException("Coupon", "name"));
     }
 
-    static CouponValidator isValidLicense() {
-        return holds(coupon -> coupon
-                        .getCouponLicenseSet()
-                        .stream()
-                        .anyMatch(couponLicense -> couponLicense.getId() == null
-                                && couponLicense.getValidFrom()
-                                .after(couponLicense.getValidUtil())),
+    static CouponValidator hasValidLicense() {
+        return holds(coupon ->
+                        coupon.getCouponLicenseSet() != null
+                                && coupon.getCouponLicenseSet()
+                                .stream()
+                                .anyMatch(couponLicense ->
+                                        couponLicense.getId() != null || (couponLicense.getValidFrom().before(couponLicense.getValidUtil())
+                                                && (couponLicense.getValidUtil().after(DateTimeUtil.getCurrentTime())))),
                 new MandatoryFieldEmptyException("Coupon", "name"));
     }
 

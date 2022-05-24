@@ -1,5 +1,6 @@
 package com.pb.coreservices.controller.api;
 
+import com.pb.coreservices.controller.dto.CouponDto;
 import com.pb.coreservices.controller.dto.MemberDto;
 import com.pb.coreservices.controller.handler.ApiResultHandler;
 import com.pb.coreservices.controller.handler.ApiResultHandlerImpl;
@@ -10,10 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/member")
@@ -31,11 +31,16 @@ public class MemberBusinessApi {
     }
 
     @PostMapping("/add-member")
-    public ResponseEntity<MemberDto> addMember(@RequestBody MemberDto memberDto) {
+    public ResponseEntity<MemberDto> addMember(@RequestParam String name, @RequestParam String lastName) {
         logger.info("Add member api has been called");
         ApiResultHandler<MemberDto> apiResultHandler = new ApiResultHandlerImpl<>();
         ResponseEntity<MemberDto> response;
         try {
+            MemberDto memberDto =
+                    MemberDto.builder()
+                            .name(name)
+                            .lastName(lastName)
+                            .build();
             Member member = memberControllerMapper.map(memberDto);
             Member savedMember = memberService.addMember(member);
             MemberDto mappedSavedMember = memberControllerMapper.map(savedMember);
@@ -47,4 +52,5 @@ public class MemberBusinessApi {
         }
         return response;
     }
+
 }
