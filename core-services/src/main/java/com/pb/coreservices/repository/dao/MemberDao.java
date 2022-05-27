@@ -29,7 +29,7 @@ public class MemberDao extends DataAccessObject {
     @Column(name = "c_last_name", nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MemberCouponDao> memberCouponSet;
 
     @Override

@@ -1,6 +1,7 @@
 package com.pb.coreservices.service;
 
 import com.pb.coreservices.domain.entity.Coupon;
+import com.pb.coreservices.domain.entity.CouponLicense;
 import com.pb.coreservices.domain.entity.Member;
 import com.pb.coreservices.domain.entity.MemberCoupon;
 import com.pb.coreservices.domain.exception.MandatoryFieldEmptyException;
@@ -12,17 +13,14 @@ import com.pb.coreservices.repository.dao.CouponDao;
 import com.pb.coreservices.repository.dao.MemberCouponDao;
 import com.pb.coreservices.repository.dao.MemberDao;
 import com.pb.coreservices.repository.mapper.CouponRepositoryMapper;
-import com.pb.coreservices.repository.mapper.MemberCouponRepositoryMapper;
 import com.pb.coreservices.repository.mapper.MemberRepositoryMapper;
+import com.pb.coreservices.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -34,15 +32,13 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponRepositoryMapper couponRepositoryMapper;
-    private final MemberCouponRepositoryMapper memberCouponRepositoryMapper;
     private final MemberRepositoryMapper memberRepositoryMapper;
     private final MemberRepository memberRepository;
 
     @Autowired
-    public CouponServiceImpl(CouponRepository couponRepository, CouponRepositoryMapper couponRepositoryMapper, MemberCouponRepositoryMapper memberCouponRepositoryMapper, MemberRepositoryMapper memberRepositoryMapper, MemberRepository memberRepository) {
+    public CouponServiceImpl(CouponRepository couponRepository, CouponRepositoryMapper couponRepositoryMapper, MemberRepositoryMapper memberRepositoryMapper, MemberRepository memberRepository) {
         this.couponRepository = couponRepository;
         this.couponRepositoryMapper = couponRepositoryMapper;
-        this.memberCouponRepositoryMapper = memberCouponRepositoryMapper;
         this.memberRepositoryMapper = memberRepositoryMapper;
         this.memberRepository = memberRepository;
     }
@@ -103,17 +99,38 @@ public class CouponServiceImpl implements CouponService {
         Objects.requireNonNull(memberId);
         Optional<MemberDao> memberDaoOptional = memberRepository.findById(Long.valueOf(memberId));
         Set<Coupon> couponSet = new HashSet<>();
+        LinkedHashSet<Coupon> result = null;
         if (memberDaoOptional.isPresent()) {
             MemberDao memberDao = memberDaoOptional.get();
             Member mappedMember = memberRepositoryMapper.map(memberDao);
+
             for (MemberCoupon memberCoupon : mappedMember.getMemberCouponSet()) {
                 Coupon coupon = memberCoupon.getCoupon();
-                if (CouponValidator.hasValidLicense().apply(coupon).isValid()) {
+                if (CouponValidator
+                        .hasValidLicense()
+                        .apply(coupon)
+                        .isValid()) {
                     couponSet.add(coupon);
                 }
             }
+            couponSet
+                    .forEach(coupon -> coupon.setCouponLicenseSet(
+                            coupon
+                                    .getCouponLicenseSet()
+                                    .stream()
+                                    .sorted(Comparator.comparing(CouponLicense::getValidUtil).reversed())
+                                    .collect(Collectors.toCollection(LinkedHashSet::new))));
+            result = couponSet
+                    .stream()
+                    .sorted(Comparator.comparing(o ->
+                            o.getCouponLicenseSet()
+                                    .stream()
+                                    .findFirst()
+                                    .map(CouponLicense::getValidUtil)
+                                    .orElse(DateTimeUtil.getCurrentTime())))
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
 
         }
-        return couponSet;
+        return result;
     }
 }
